@@ -1,0 +1,69 @@
+import mongoose from "mongoose";
+const orderItemSchema=new mongoose.Schema(
+    {
+        medicine_id:{
+            type:Number,
+            required:true
+        },
+        medicine_name:{
+            type:String,
+            required:true
+        },
+        quantity:{
+            type:Number,
+            required:true,
+            min:1
+        },
+        price:{
+            type:Number,
+            required:true,
+            min:0
+        },
+        prescription_document_url:{
+            type:String,
+            default:""
+        }
+    },
+    {
+        _id:false
+    }
+);
+const orderSchema=new mongoose.Schema(
+    {
+        user_id:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Patient",
+            required:true
+        },
+        items:{
+            type:[orderItemSchema],
+            required:true
+        },
+        total_amount:{
+            type:Number,
+            required:true,
+            min:0
+        },
+        status:{
+            type:String,
+            enum:[
+                "pending",
+                "confirmed",
+                "processing",
+                "shipped",
+                "delivered",
+                "cancelled",
+            ],
+            default:"pending"
+        },
+        delivery_address:{
+            type:String,
+            default:""
+        }
+    },
+    {
+        timestamps:true
+    }
+);
+const Order=mongoose.model("Order",orderSchema);
+export default Order;

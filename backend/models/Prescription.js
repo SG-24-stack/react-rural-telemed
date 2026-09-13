@@ -1,0 +1,61 @@
+import mongoose from "mongoose";
+const prescriptionSchema=new mongoose.Schema(
+    {
+        doctor_id:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Doctor",
+            required:true
+        },
+        patient_id:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Patient",
+            required:true
+        },
+        disease:{
+            type:String,
+            required:true,
+            trim:true
+        },
+        diagnosis:{
+            type:String,
+            trim:true
+        },
+        medicines:{
+            type:String,
+            required:true,
+            trim:true
+        },
+        treatment:{
+            type:String,
+            trim:true,
+            default:""
+        },
+        suggestions:{
+            type:String,
+            trim:true,
+            default:""
+        },
+        next_steps:{
+            type:String,
+            trim:true,
+            default:""
+        },
+        notes:{
+            type:String,
+            trim:true,
+            default:""
+        },
+        pdf_path:{
+            type:String,
+            default:null
+        }
+    },
+    {
+        timestamps:true
+    }
+);
+const Prescription=mongoose.model(
+    "Prescription",
+    prescriptionSchema
+);
+export default Prescription;

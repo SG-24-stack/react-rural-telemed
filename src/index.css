@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* Loads your existing tailwind.config.js (content paths, theme.extend,
+   etc.) into this v4 CSS-based config. Tailwind v4 does NOT auto-load
+   a JS config file the way v3 did — without this line, tailwind.config.js
+   was silently ignored.
+   Adjust the relative path below so it points from THIS CSS file's
+   location to your actual tailwind.config.js (e.g. "../tailwind.config.js"
+   if this file lives in src/ and the config is at the project root). */
+@config "../tailwind.config.js";
+
+/* Tailwind v4's preferred way to drive dark: variants off a class
+   instead of the OS `prefers-color-scheme`. This makes `dark:` classes
+   respond to a `.dark` class on <html> (or any ancestor) — which is
+   what ThemeContext should be toggling — instead of following the
+   device's system theme regardless of your in-app toggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Continuous diagonal scrolling animation for the medical logos */
+@keyframes scrollIcons {
+  0% { background-position: 0 0, 0 0, 0% 50%; }
+  100% { background-position: 400px 400px, -300px 300px, 100% 50%; }
+}
+
+@keyframes medicalGradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Soft breathing glow animation for Navbar Logo (kept for compatibility;
+   the current Logo.jsx builds its glow with inline Tailwind classes
+   instead, so this rule is unused unless you reference it elsewhere) */
+@keyframes logoSoftPulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.04);
+  }
+}
+
+.logo-animated-glow {
+  position: absolute;
+  inset: -6px;
+  background: rgba(255, 255, 255, 0.3);
+  filter: blur(12px);
+  border-radius: 1rem;
+  animation: logoSoftPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Animated Background with Medical Logos (Cross and Heart) */
+.medical-animated-bg {
+  background-color: #f0fdf4;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 20h20v20h20v20H50v20H30V60H10V40h20V20z' fill='%2316a34a' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 90.7l-3.9-3.6C39.9 72.4 28.5 62 28.5 49.2c0-10.6 8.5-19.2 19.2-19.2 6.1 0 11.9 2.9 15.3 7.6 3.4-4.7 9.2-7.6 15.3-7.6 10.6 0 19.2 8.5 19.2 19.2 0 12.8-11.4 23.2-27.6 37.9L60 90.7z' fill='%232563eb' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E"),
+    linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0f9ff 100%);
+  
+  background-size: 200px 200px, 300px 300px, 400% 400%;
+  animation: scrollIcons 40s linear infinite;
+  min-height: 100vh;
+}
+
+/* Animated multi-color gradient lettering — brighter, more colors, faster cycle */
+.animated-colored-text {
+  background: linear-gradient(270deg, #16a34a, #2563eb, #0d9488, #eab308, #dc2626, #16a34a);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradientShift 4s ease infinite;
+}
+
+@keyframes textGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Notice Ticker marquee - seamless loop */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+/* Ambient Doctor-Patient Scene (background watermark animation) */
+.bg-scene-float {
+  opacity: 0.16;
+  animation: bgSceneFloat 8s ease-in-out infinite;
+}
+
+@keyframes bgSceneFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-10px); }
+}
+
+.scene-phase {
+  opacity: 0;
+  animation-duration: 15s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.scene-phase-1 { animation-name: scenePhase1; }
+.scene-phase-2 { animation-name: scenePhase2; }
+.scene-phase-3 { animation-name: scenePhase3; }
+
+@keyframes scenePhase1 {
+  0%, 2%    { opacity: 0; }
+  6%, 28%   { opacity: 1; }
+  33%, 100% { opacity: 0; }
+}
+
+@keyframes scenePhase2 {
+  0%, 35%   { opacity: 0; }
+  39%, 61%  { opacity: 1; }
+  66%, 100% { opacity: 0; }
+}
+
+@keyframes scenePhase3 {
+  0%, 68%   { opacity: 0; }
+  72%, 94%  { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
+/* Animated Medical Awareness Background (full-bleed, login-style illustrations) */
+.medical-awareness-bg {
+  background: linear-gradient(160deg, #0f2f27 0%, #143a30 30%, #1c3d33 60%, #123a34 80%, #0f2f27 100%);
+  background-size: 300% 300%;
+  animation: medicalGradientAnimation 60s ease-in-out infinite;
+}
+
+.awareness-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation-duration: 56s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.awareness-svg {
+  width: min(70vw, 640px);
+  height: auto;
+  opacity: 0.22;
+}
+
+.awareness-phase-1 { animation-name: awarenessPhase1; }
+.awareness-phase-2 { animation-name: awarenessPhase2; }
+.awareness-phase-3 { animation-name: awarenessPhase3; }
+.awareness-phase-4 { animation-name: awarenessPhase4; }
+.awareness-phase-5 { animation-name: awarenessPhase5; }
+.awareness-phase-6 { animation-name: awarenessPhase6; }
+.awareness-phase-7 { animation-name: awarenessPhase7; }
+
+@keyframes awarenessPhase1 {
+  0%, 0.5%   { opacity: 0; }
+  2.5%, 10%  { opacity: 1; }
+  12%, 100%  { opacity: 0; }
+}
+
+@keyframes awarenessPhase2 {
+  0%, 14.8%    { opacity: 0; }
+  16.8%, 24.3% { opacity: 1; }
+  26.3%, 100%  { opacity: 0; }
+}
+
+@keyframes awarenessPhase3 {
+  0%, 29.1%    { opacity: 0; }
+  31.1%, 38.6% { opacity: 1; }
+  40.6%, 100%  { opacity: 0; }
+}
+
+@keyframes awarenessPhase4 {
+  0%, 43.4%    { opacity: 0; }
+  45.4%, 52.9% { opacity: 1; }
+  54.9%, 100%  { opacity: 0; }
+}
+
+@keyframes awarenessPhase5 {
+  0%, 57.6%    { opacity: 0; }
+  59.6%, 67.1% { opacity: 1; }
+  69.1%, 100%  { opacity: 0; }
+}
+
+@keyframes awarenessPhase6 {
+  0%, 71.9%    { opacity: 0; }
+  73.9%, 81.4% { opacity: 1; }
+  83.4%, 100%  { opacity: 0; }
+}
+
+@keyframes awarenessPhase7 {
+  0%, 86.2%    { opacity: 0; }
+  88.2%, 95.7% { opacity: 1; }
+  97.7%, 100%  { opacity: 0; }
+}
+
+/* Realistic Photographic Background (Ken Burns Effect, 10 images) */
+.ken-burns-bg {
+  opacity: 0;
+  animation: kenBurnsFade 60s infinite;
+}
+
+.phase-1  { animation-delay: 0s;  }
+.phase-2  { animation-delay: 6s;  }
+.phase-3  { animation-delay: 12s; }
+.phase-4  { animation-delay: 18s; }
+.phase-5  { animation-delay: 24s; }
+.phase-6  { animation-delay: 30s; }
+.phase-7  { animation-delay: 36s; }
+.phase-8  { animation-delay: 42s; }
+.phase-9  { animation-delay: 48s; }
+.phase-10 { animation-delay: 54s; }
+
+@keyframes kenBurnsFade {
+  0%   { opacity: 0;   transform: scale(1);    }
+  4%   { opacity: 1;   transform: scale(1.02); }
+  10%  { opacity: 1;   transform: scale(1.04); }
+  14%  { opacity: 0;   transform: scale(1.05); }
+  100% { opacity: 0;   transform: scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .bg-scene-float,
+  .scene-phase,
+  .medical-awareness-bg,
+  .awareness-scene,
+  .ken-burns-bg,
+  .logo-animated-glow {
+    animation: none !important;
+  }
+  .scene-phase-1 { opacity: 1; }
+  .scene-phase-2,
+  .scene-phase-3 { opacity: 0; }
+  .awareness-phase-1 { opacity: 1; }
+  .awareness-phase-2,
+  .awareness-phase-3,
+  .awareness-phase-4,
+  .awareness-phase-5,
+  .awareness-phase-6,
+  .awareness-phase-7 { opacity: 0; }
+  .phase-1 { opacity: 1; transform: none; }
+  .phase-2, .phase-3, .phase-4, .phase-5,
+  .phase-6, .phase-7, .phase-8, .phase-9, .phase-10 { opacity: 0; }
+}

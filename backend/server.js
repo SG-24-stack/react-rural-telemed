@@ -1,0 +1,104 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import http from "http";
+import {Server} from "socket.io";
+import connectDB from "./config/db.js";
+import patientRoutes from "./routes/patientRoutes.js";
+import otpRoutes from "./routes/otpRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import doctorRoutes from "./routes/doctorRoutes.js";
+import hospitalRoutes from "./routes/hospitalRoutes.js";
+import prescriptionRoutes from "./routes/prescriptionRoutes.js";
+import appointmentRoutes from "./routes/appointmentRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+import medicineRoutes from "./routes/medicineRoutes.js";
+dotenv.config();
+const app=express();
+app.use(cors({
+    origin:"*",
+    methods:["GET","POST","PUT","PATCH","DELETE"],
+}));
+app.use(express.json());
+app.use("/api/patients",patientRoutes);
+app.use("/api/auth",otpRoutes);
+app.use("/api/auth",authRoutes);
+app.use("/api/doctors",doctorRoutes);
+app.use("/api/hospitals",hospitalRoutes);
+app.use("/api/prescriptions",prescriptionRoutes);
+app.use("/api/appointments",appointmentRoutes);
+app.use("/api/orders",orderRoutes);
+app.use("/api/medicines",medicineRoutes);
+connectDB();
+app.get("/",(req,res)=>{
+    res.send("Rural Telemedicine Backend is running");
+});
+
+const server=http.createServer(app);
+const io=new Server(server,{
+    cors:{
+        origin:"*",
+        methods:["GET","POST"],
+    },
+});
+io.on("connection",(socket)=>{
+    console.log("User connected:",socket.id);
+    socket.on("join-room",(roomId,userId,role)=>{
+        console.log(
+            `👤 ${role} ${userId} joined consultation room:${roomId}`
+        );
+        const room=io.sockets.adapter.rooms.get(roomId);
+        const numberOfUsers=room?room.size:0;
+        socket.join(roomId);
+        console.log(
+            `🏥 Room ${roomId} currently has ${numberOfUsers + 1} user(s)`
+        );
+        if(role === "doctor" && numberOfUsers>0){
+            socket.emit("patient-connected");
+        }
+        if(role === "patient" && numberOfUsers>0){
+            socket.to(roomId).emit("patient-connected");
+
+        }
+    });
+    socket.on("offer",(data)=>{
+        console.log(
+            `📩 WebRTC received for room:${data.roomId}`
+        );
+    socket.to(data.roomId).emit("offer",{
+        signal:data.signal,
+        from:socket.id,
+    });
+    });
+    socket.on("answer",(data)=>{
+        console.log(`📩 WebRTC answer received for room:${data.roomId}`);
+    socket.to(data.roomId).emit("answer",{
+        signal:data.signal,
+        from:socket.id,
+    });
+    });
+    socket.on("ping-check",()=>{
+        socket.emit("pong-check",{
+            serverTime:Date.now(),
+        });
+    });
+    socket.on("disconnecting",()=>{
+        console.log(
+            "User disconnecting:",
+            socket.id
+        );
+        for(const roomId of socket.rooms){
+            if(roomId !== socket.id){
+                socket.to(roomId)
+                .emit("user-disconnected");
+            }
+        }
+    });
+    socket.on("disconnect",()=>{
+        console.log("User disconnected:",socket.id);
+    });
+});
+const PORT=process.env.PORT || 5000;
+server.listen(PORT,'0.0.0.0',() =>{
+    console.log(`Server running on PORT ${PORT}`);
+});

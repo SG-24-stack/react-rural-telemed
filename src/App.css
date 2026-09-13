@@ -1,0 +1,63 @@
+/* App.css
+   --------
+   Custom, hand-written styles that sit on top of Tailwind (which lives
+   in index.css via @tailwind directives). Only classes actually
+   referenced in the app's components belong here — Tailwind's own
+   utilities (bg-*, flex, rounded-xl, etc.) should stay as Tailwind
+   classes in JSX, not be duplicated here.
+
+   Classes defined below, and where they're used:
+     .animate-fade-in       — Dashboard.jsx (triage result, pharmacy
+                               status banners), Login.jsx (forgot-
+                               password modal)
+     .animated-colored-text — Dashboard.jsx header title
+*/
+
+/* Simple fade + rise entrance for banners/modals that appear after an
+   action (a triage result, a status message, a modal). Distinct from
+   Tailwind's built-in animate-pulse/animate-bounce/etc. */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out both;
+}
+
+/* Slow-cycling gradient text effect for the Dashboard header title —
+   sweeps through the app's green/emerald/teal palette rather than
+   sitting as flat static text. */
+@keyframes colorCycle {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-colored-text {
+  background: linear-gradient(90deg, #059669, #0d9488, #16a34a, #059669);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: colorCycle 6s ease-in-out infinite;
+}
+
+/* Smooth in-page scrolling, complementing the JS
+   scrollIntoView({ behavior: 'smooth' }) calls (e.g. MegaMenu's AI
+   Symptom Checker tile jumping to Dashboard's #symptom-checker). */
+html {
+  scroll-behavior: smooth;
+}
