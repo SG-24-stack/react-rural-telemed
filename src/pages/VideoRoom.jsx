@@ -32,7 +32,7 @@ const ICE_SERVERS = {
 };
 
 // Replace with your Render Backend URL from .env or default to Render address
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://your-backend.onrender.com';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://react-rural-telemed.onrender.com';
 
 export default function VideoRoom({ setCurrentPage, roomId = 'consultation-room-1', userRole = 'doctor' }) {
   const [isVideoOn, setIsVideoOn] = useState(true);

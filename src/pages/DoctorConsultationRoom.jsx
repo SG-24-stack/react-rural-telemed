@@ -21,7 +21,7 @@ const ICE_SERVERS = {
   ]
 };
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://react-rural-telemed.onrender.com';
 
 export default function DoctorConsultationRoom({ setCurrentPage, roomId = 'ENC-9042' }) {
   const [activeTab, setActiveTab] = useState('prescription');
