@@ -47,7 +47,7 @@ export default function Dashboard({ setCurrentPage }) {
         }
 
         const res = await fetch(
-          'http://localhost:5000/api/prescriptions/my-prescription',
+          'http://react-rural-telemedicine-app.onrender.com/api/prescriptions/my-prescription',
           {
             method: 'GET',
             headers: {
@@ -103,7 +103,7 @@ export default function Dashboard({ setCurrentPage }) {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-            `http://localhost:5000/api/prescriptions/download/${prescription._id}`,
+            `http://react-rural-telemedicine-app.onrender.com/api/prescriptions/download/${prescription._id}`,
             {
                 method: "GET",
                 headers: {

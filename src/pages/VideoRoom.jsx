@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import doctorPlaceholder from '../assets/images/doctor paceholder.jpg';
 import { PAGES } from '../constants/pages';
 import { useOfflineSync } from '../context/OfflineSyncContext';
-const SOCKET_SERVER_URL = 'https://localhost:5000'; 
+const SOCKET_SERVER_URL = 'https://react-rural-telemedicine-app.onrender.com'; 
 export default function VideoRoom({ setCurrentPage,role="patient",patientId,appointmentId}) {
   const { isOnline, queueAction, pendingCount } = useOfflineSync();
   const [isMuted, setIsMuted] = useState(false);
@@ -214,7 +214,7 @@ const handleSubmitPrescription = async (e) => {
     }
 
     const response = await fetch(
-      'http://localhost:5000/api/prescriptions',
+      'http://react-rural-telemedicine-app.onrender.com/api/prescriptions',
       {
         method: 'POST',
         headers: {
@@ -267,7 +267,7 @@ const handleSubmitPrescription = async (e) => {
     }
 
     const response = await fetch(
-      `http://localhost:5000/api/appointments/${appointmentId}/status`,
+      `http://react-rural-telemedicine-app.onrender.com/api/appointments/${appointmentId}/status`,
       {
         method: "PATCH",
         headers: {
