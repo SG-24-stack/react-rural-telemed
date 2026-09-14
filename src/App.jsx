@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Appointments from './pages/Appointments';
 import VideoRoom from './pages/VideoRoom';
+import DoctorConsultationRoom from './pages/DoctorConsultationRoom';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 import EmergencyDonation from './pages/EmergencyDonation';
@@ -27,7 +28,7 @@ import MedicineOrder from './pages/MedicineOrder';
 import DoctorProfileEdit from './pages/DoctorProfileEdit';
 import NearbyCareFinder from './pages/NearbyCareFinder';
 import HospitalFinder from './pages/HospitalFinder';
-import MyOrders from "./pages/MyOrders"
+import MyOrders from "./pages/MyOrders";
 import EmergencySOS from './pages/EmergencySOS';
 import MedicalVault from './pages/MedicalVault';
 import LanguageTranslator from './pages/LanguageTranslator';
@@ -47,6 +48,9 @@ export default function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Active Teleconsultation Room Identifier
+  const activeRoomId = selectedAppointmentId ? `ENC-${selectedAppointmentId}` : 'ENC-9042';
+
   // -----------------------------------------
   // SIGN OUT
   // -----------------------------------------
@@ -60,6 +64,7 @@ export default function App() {
     // Go back to role selection
     setCurrentPage('role-select');
   };
+
   const renderPage = () => {
 
     switch (currentPage) {
@@ -108,11 +113,16 @@ export default function App() {
             setCurrentPage={setCurrentPage}
           />
         );
+      
+      {/* ----------------------------------------- */}
+      {/* TELECONSULTATION & VIDEO ROOMS             */}
+      {/* ----------------------------------------- */}
+      case 'doctor-consultation':
       case 'doctor-video':
         return (
-          <VideoRoom
+          <DoctorConsultationRoom
             setCurrentPage={setCurrentPage}
-            role="doctor"
+            roomId={activeRoomId}
             patientId={selectedPatientId}
             appointmentId={selectedAppointmentId}
           />
@@ -122,8 +132,10 @@ export default function App() {
           <VideoRoom
             setCurrentPage={setCurrentPage}
             role="patient"
+            roomId={activeRoomId}
           />
         );
+
       case PAGES.PROFILE:
         return (
           <Profile
@@ -197,18 +209,18 @@ export default function App() {
           />
         );
       case PAGES.MEDICINE_ORDER:
-        case 'medicine-ordering':
+      case 'medicine-ordering':
         return (
           <MedicineOrder
             setCurrentPage={setCurrentPage}
           />
         );
-        case 'my-orders':
-       return (
-       <MyOrders
-      setCurrentPage={setCurrentPage}
-    />
-  );
+      case 'my-orders':
+        return (
+          <MyOrders
+            setCurrentPage={setCurrentPage}
+          />
+        );
       case PAGES.DOCTOR_PROFILE_EDIT:
         return (
           <DoctorProfileEdit
@@ -294,8 +306,9 @@ export default function App() {
         );
     }
   };
-  const showNavbar =
-    isLoggedIn && currentPage !== PAGES.HOSPITAL_PORTAL;
+
+  const showNavbar = isLoggedIn && currentPage !== PAGES.HOSPITAL_PORTAL;
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
 
@@ -317,4 +330,3 @@ export default function App() {
     </div>
   );
 }
-
